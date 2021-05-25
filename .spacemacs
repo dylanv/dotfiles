@@ -144,7 +144,10 @@ It should only modify the values of Spacemacs settings."
    ;; (default t)
    dotspacemacs-verify-spacelpa-archives t
 
-   ;; If non-nil then spacemacs will check for updates at startup
+   ;; 
+
+
+If non-nil then spacemacs will check for updates at startup
    ;; when the current branch is not `develop'. Note that checking for
    ;; new versions works via git commands, thus it calls GitHub services
    ;; whenever you start Emacs. (default nil)
@@ -537,7 +540,8 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
           (and (eq 'org-mode major-mode)
               (let* ((begin (my/org-in-latex-fragment-p)))
                 (cond
-                  ;; were on a fragment and now on a new fragment
+ 
+                 ;; were on a fragment and now on a new fragment
                   ((and
                     ;; fragment we were on
                     org-latex-fragment-last
@@ -592,6 +596,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
     (add-hook 'post-command-hook 'org-latex-fragment-toggle-auto)
     (setq org-latex-fragment-toggle-helper (byte-compile 'org-latex-fragment-toggle-helper))
     (setq org-latex-fragment-toggle-auto (byte-compile 'org-latex-fragment-toggle-auto))
+
 )
 
 (defun dotspacemacs/user-load ()
@@ -617,10 +622,21 @@ before packages are loaded."
   (setq org-insert-heading-respect-content t)
   ;; Enable automatic inline image rendering
   (setq org-startup-with-inline-images t)
-  ;; Expand latex formulas when your cursor is over them
+  ;; Show link formatting under mouse
+  ;; https://stackoverflow.com/questions/30312638/is-there-a-package-or-setting-to-show-an-org-mode-link-under-cursor-destinatio
+  (defun link-message ()
+    (let ((object (org-element-context)))
+      (when (eq (car object) 'link)
+        (message "%s"
+                 (org-element-property :raw-link object)))))
 
-
+  (add-hook 'post-command-hook 'link-message)
   ;; -------
+
+  (use-package evil-surround
+      :ensure t
+      :config
+      (global-evil-surround-mode 1))
 
   )
 
