@@ -144,10 +144,7 @@ It should only modify the values of Spacemacs settings."
    ;; (default t)
    dotspacemacs-verify-spacelpa-archives t
 
-   ;; 
-
-
-If non-nil then spacemacs will check for updates at startup
+   ;; If non-nil then spacemacs will check for updates at startup
    ;; when the current branch is not `develop'. Note that checking for
    ;; new versions works via git commands, thus it calls GitHub services
    ;; whenever you start Emacs. (default nil)
@@ -622,22 +619,12 @@ before packages are loaded."
   (setq org-insert-heading-respect-content t)
   ;; Enable automatic inline image rendering
   (setq org-startup-with-inline-images t)
-  ;; Show link formatting under mouse
-  ;; https://stackoverflow.com/questions/30312638/is-there-a-package-or-setting-to-show-an-org-mode-link-under-cursor-destinatio
-  (defun link-message ()
-    (let ((object (org-element-context)))
-      (when (eq (car object) 'link)
-        (message "%s"
-                 (org-element-property :raw-link object)))))
-
-  (add-hook 'post-command-hook 'link-message)
   ;; -------
 
-  (use-package evil-surround
-      :ensure t
-      :config
-      (global-evil-surround-mode 1))
-
+  (spacemacs|use-package-add-hook evil-surround
+    :post-config
+    (evil-define-key 'visual evil-surround-mode-map "s" 'evil-substitute)
+    (evil-define-key 'visual evil-surround-mode-map "S" 'evil-surround-region))
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
