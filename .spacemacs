@@ -64,7 +64,7 @@ This function should only modify configuration layer settings."
    ;; `dotspacemacs/user-config'. To use a local version of a package, use the
    ;; `:location' property: '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages '(anki-editor)
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -621,6 +621,13 @@ before packages are loaded."
   (setq org-startup-with-inline-images t)
   ;; -------
 
+  ;; ANKI-EDITOR
+  ;; Key-bindings for https://github.com/louietan/anki-editor
+  (spacemacs/set-leader-keys (kbd "mmi") 'anki-editor-insert-note)
+  (spacemacs/set-leader-keys (kbd "mmc") 'anki-editor-cloze-region)
+  (spacemacs/set-leader-keys (kbd "mmp") 'anki-editor-push-notes)
+
+  ;; VIM SURROUND
   (spacemacs|use-package-add-hook evil-surround
     :post-config
     (evil-define-key 'visual evil-surround-mode-map "s" 'evil-substitute)
