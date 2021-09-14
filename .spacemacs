@@ -634,8 +634,8 @@ before packages are loaded."
     (setq org-latex-fragment-toggle-auto (byte-compile 'org-latex-fragment-toggle-auto))
 
       ;; ORG-DOWNLOAD
-      (setq org-download-heading-lvl nil)
-      (setq org-download-image-dir: "./img/")
+      (setq org-download-heading-lvl 0)
+      (setq-default org-download-image-dir "./img/")
 
       (spacemacs/set-leader-keys (kbd "miDi") 'org-download-clipboard)
 
