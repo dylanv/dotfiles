@@ -634,11 +634,15 @@ before packages are loaded."
     (setq org-latex-fragment-toggle-helper (byte-compile 'org-latex-fragment-toggle-helper))
     (setq org-latex-fragment-toggle-auto (byte-compile 'org-latex-fragment-toggle-auto))
 
-      ;; ORG-DOWNLOAD
-      (setq org-download-heading-lvl 0)
-      (setq-default org-download-image-dir "./img/")
+    ;; ORG-DOWNLOAD
+    (setq org-download-heading-lvl 0)
+    (setq-default org-download-image-dir "./img/")
+    ;; Get things working on Windows :(
+    (setenv "PATH" (concat "c:/Program Files/ImageMagick-7.1.0-Q16-HDRI/convert.exe" (getenv "PATH")))
+    (setq org-download-screenshot-method "convert clipboard: %s")
+    (setq org-download-method '+org/org-download-method)
 
-      (spacemacs/set-leader-keys (kbd "miDi") 'org-download-clipboard)
+    (spacemacs/set-leader-keys (kbd "miDi") 'org-download-clipboard)
 
     )
   ;; -------
