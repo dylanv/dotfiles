@@ -638,10 +638,6 @@ before packages are loaded."
     ;; ORG-DOWNLOAD
     (setq org-download-heading-lvl 0)
     (setq-default org-download-image-dir "./img/")
-    ;; Get things working on Windows :(
-    (setenv "PATH" (concat "c:/Program Files/ImageMagick-7.1.0-Q16-HDRI/convert.exe" (getenv "PATH")))
-    (setq org-download-screenshot-method "convert clipboard: %s")
-    (setq org-download-method '+org/org-download-method)
 
     (spacemacs/set-leader-keys (kbd "miDi") 'org-download-clipboard)
 
