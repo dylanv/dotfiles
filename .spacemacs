@@ -547,6 +547,8 @@ before packages are loaded."
   (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.7))
   ;; (plist-put org-format-latex-options :scale 1.7)
   ;; (org :variables org-format-latex-options ' (:scale 1.7))
+  ;; Set all images to the same size
+  (setq org-image-actual-width 400)
 
   ;; Show the raw input for latex fragments under images
   ;; https://ivanaf.com/automatic_latex_fragment_toggling_in_org-mode.html
