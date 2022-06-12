@@ -657,6 +657,10 @@ before packages are loaded."
 
     (spacemacs/set-leader-keys (kbd "miDi") 'org-download-clipboard)
 
+    ;; Something was preventing theme backgrounds from getting set.
+    ;; This seems to prevent the issue
+    (custom-set-faces '(default ((t (:background nil)))))
+
     )
   ;; -------
 
