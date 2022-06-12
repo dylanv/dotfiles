@@ -649,8 +649,11 @@ before packages are loaded."
     (add-hook 'org-mode-hook (lambda () (hl-todo-mode -1)))
 
     ;; ORG-DOWNLOAD
+    (require 'org-download)
     (setq org-download-heading-lvl 0)
-    (setq-default org-download-image-dir "./img/")
+    (setq-default org-download-image-dir ".\\images\\")
+    ;; not the escaped " so that the space in the process name works
+    (setq org-download-screenshot-method "\"c:/Program Files/ImageMagick-7.1.0-Q16-HDRI/convert.exe\" clipboard: %s")
 
     (spacemacs/set-leader-keys (kbd "miDi") 'org-download-clipboard)
 
