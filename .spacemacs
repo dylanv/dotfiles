@@ -636,6 +636,18 @@ before packages are loaded."
     (setq org-latex-fragment-toggle-helper (byte-compile 'org-latex-fragment-toggle-helper))
     (setq org-latex-fragment-toggle-auto (byte-compile 'org-latex-fragment-toggle-auto))
 
+    ;; todo states
+    ;; https://practical.li/spacemacs/org-mode/todo-states.html
+    (setq org-todo-keywords '((sequence "TODO" "DOING" "|" "DONE")))
+    (setq org-todo-keyword-faces
+          '(("TODO" . "Silver")
+            ("DOING" . "DarkOrange")
+            ("DONE" . "LimeGreen")
+            ))
+    ;; Get faces working correctly
+    ;; https://www.reddit.com/r/orgmode/comments/b9qrau/customized_org_faces_being_overridden_in_buffer/
+    (add-hook 'org-mode-hook (lambda () (hl-todo-mode -1)))
+
     ;; ORG-DOWNLOAD
     (setq org-download-heading-lvl 0)
     (setq-default org-download-image-dir "./img/")
