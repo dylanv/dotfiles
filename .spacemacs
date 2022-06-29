@@ -702,7 +702,20 @@ before packages are loaded."
     ;; Something was preventing theme backgrounds from getting set.
     ;; This seems to prevent the issue
     ;; (custom-set-faces '(default ((t (:background nil)))))
+    (require 'org-reverse-datetree)
 
+    (setq org-capture-templates
+          '(("l" "Log" entry
+             (file+function "d:/Dropbox/Notes/log.org" org-reverse-datetree-goto-date-in-file)
+             "* TODO %? %^g"
+             :jump-to-captured t)
+            ("b" "Bookmark" entry
+             (file+function "d:/Dropbox/Notes/notes.org" (lambda ()
+                                                           (org-reverse-datetree-goto-date-in-file
+                                                            nil :olp '("Bookmarks"))))
+             "* %^{Description} %^g\n%(org-cliplink-capture)"
+             :empty-lines 0)
+            ))
     )
   ;; -------
 
