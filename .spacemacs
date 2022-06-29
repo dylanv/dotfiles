@@ -51,7 +51,7 @@ This function should only modify configuration layer settings."
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
      julia
-     spell-checking
+     (spell-checking :variables spell-checking-enable-auto-dictionary nil)
      syntax-checking
      version-control
      xclipboard
@@ -712,6 +712,12 @@ before packages are loaded."
     (evil-define-key 'visual evil-surround-mode-map "s" 'evil-substitute)
     (evil-define-key 'visual evil-surround-mode-map "S" 'evil-surround-region))
 
+  ;; Spellcheck
+  (setq ispell-program-name "C:/msys64/mingw64/bin/hunspell.exe")
+  (setenv "LANG" "en_GB")
+  (with-eval-after-load "ispell"
+    (setq ispell-really-hunspell t)
+    (setq ispell-local-dictionary "en_GB"))
 
   )
 
