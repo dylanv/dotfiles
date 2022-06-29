@@ -67,7 +67,7 @@ This function should only modify configuration layer settings."
    ;; `dotspacemacs/user-config'. To use a local version of a package, use the
    ;; `:location' property: '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(anki-editor org-download evil-surround)
+   dotspacemacs-additional-packages '(anki-editor org-download evil-surround org-reverse-datetree)
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -676,11 +676,14 @@ before packages are loaded."
 
     ;; todo states
     ;; https://practical.li/spacemacs/org-mode/todo-states.html
-    (setq org-todo-keywords '((sequence "TODO" "DOING" "|" "DONE")))
+    (setq org-todo-keywords '((sequence "TODO" "DOING" "BLOCKED" "|" "DONE" "CANCELLED")))
+    ;; https://en.wikipedia.org/wiki/Web_colors
     (setq org-todo-keyword-faces
-          '(("TODO" . "Silver")
+          '(("TODO" . "DarkGray")
             ("DOING" . "DarkOrange")
             ("DONE" . "LimeGreen")
+            ("BLOCKED" . "DarkRed")
+            ("CANCELLED" . "DarkSlateGray")
             ))
     ;; Get faces working correctly
     ;; https://www.reddit.com/r/orgmode/comments/b9qrau/customized_org_faces_being_overridden_in_buffer/
