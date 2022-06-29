@@ -32,7 +32,7 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(
+   '(javascript
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
@@ -43,6 +43,7 @@ This function should only modify configuration layer settings."
      emacs-lisp
      git
      helm
+     latex
      ;; lsp
      ;; markdown
      multiple-cursors
@@ -539,7 +540,7 @@ default it calls `spacemacs/load-spacemacs-env' which loads the environment
 variables declared in `~/.spacemacs.env' or `~/.spacemacs.d/.spacemacs.env'.
 See the header of this file for more information."
   (spacemacs/load-spacemacs-env)
-)
+  )
 
 (defun dotspacemacs/user-init ()
   "Initialization for user code:
@@ -547,7 +548,7 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-)
+  )
 
 
 (defun dotspacemacs/user-load ()
@@ -555,7 +556,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
 dump."
-)
+  )
 
 
 (defun dotspacemacs/user-config ()
@@ -567,54 +568,57 @@ before packages are loaded."
   ;; ORG-MODE
   ;; --------
   (with-eval-after-load 'org
-  ;; Nice pretty indents
-  (setq org-startup-indented t)
-  ;; Start up collapsed
-  (setq org-startup-folded t)
-  ;; When creating a new heading don't mess up the one you're currently in
-  (setq org-insert-heading-respect-content t)
-  ;; Enable automatic inline image rendering
-  (setq org-startup-with-inline-images t)
-  ;; Make latex figures larger
-  (setq org-modules '(org-latex))
-  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.7))
-  ;; (plist-put org-format-latex-options :scale 1.7)
-  ;; (org :variables org-format-latex-options ' (:scale 1.7))
-  ;; Set all images to the same size
-  (setq org-image-actual-width 400)
+    ;; Nice pretty indents
+    (setq org-startup-indented t)
+    ;; Start up collapsed
+    (setq org-startup-folded t)
+    ;; When creating a new heading don't mess up the one you're currently in
+    (setq org-insert-heading-respect-content t)
+    ;; Enable automatic inline image rendering
+    (setq org-startup-with-inline-images t)
+    ;; Show equations on startup
+    (setq org-startup-with-latex-preview t)
+    ;; Show italic/bold without the characters around
+    (setq org-hide-emphasis-markers t)
+    ;; Make latex figures larger
+    (setq org-modules '(org-latex))
+    (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.7))
+    ;; (plist-put org-format-latex-options :scale 1.7)
+    ;; (org :variables org-format-latex-options ' (:scale 1.7))
+    ;; Set all images to the same size
+    (setq org-image-actual-width 400)
 
-  ;; Show the raw input for latex fragments under images
-  ;; https://ivanaf.com/automatic_latex_fragment_toggling_in_org-mode.html
-  ;; Had to change to use org-latex-preview because org-toggle-latex-fragment is deprecated
-  (defvar org-latex-fragment-last nil
-    "Holds last fragment/environment you were on.")
+    ;; Show the raw input for latex fragments under images
+    ;; https://ivanaf.com/automatic_latex_fragment_toggling_in_org-mode.html
+    ;; Had to change to use org-latex-preview because org-toggle-latex-fragment is deprecated
+    (defvar org-latex-fragment-last nil
+      "Holds last fragment/environment you were on.")
 
-  (defun my/org-latex-fragment--get-current-latex-fragment ()
-    "Return the overlay associated with the image under point."
-    (car (--select (eq (overlay-get it 'org-overlay-type) 'org-latex-overlay) (overlays-at (point)))))
+    (defun my/org-latex-fragment--get-current-latex-fragment ()
+      "Return the overlay associated with the image under point."
+      (car (--select (eq (overlay-get it 'org-overlay-type) 'org-latex-overlay) (overlays-at (point)))))
 
-  (defun my/org-in-latex-fragment-p ()
+    (defun my/org-in-latex-fragment-p ()
       "Return the point where the latex fragment begins, if inside
     a latex fragment. Else return false"
       (let* ((el (org-element-context))
-            (el-type (car el)))
+             (el-type (car el)))
         (and (or (eq 'latex-fragment el-type) (eq 'latex-environment el-type))
-            (org-element-property :begin el))))
+             (org-element-property :begin el))))
 
-  (defun org-latex-fragment-toggle-auto ()
-    ;; Wait for the s
-    (interactive)
-    (while-no-input 
-      (run-with-idle-timer 0.05 nil 'org-latex-fragment-toggle-helper)))
+    (defun org-latex-fragment-toggle-auto ()
+      ;; Wait for the s
+      (interactive)
+      (while-no-input
+        (run-with-idle-timer 0.05 nil 'org-latex-fragment-toggle-helper)))
 
-  (defun org-latex-fragment-toggle-helper ()
+    (defun org-latex-fragment-toggle-helper ()
       "Toggle a latex fragment image "
       (condition-case nil
           (and (eq 'org-mode major-mode)
-              (let* ((begin (my/org-in-latex-fragment-p)))
-                (cond
- 
-                 ;; were on a fragment and now on a new fragment
+               (let* ((begin (my/org-in-latex-fragment-p)))
+                 (cond
+                  ;; were on a fragment and now on a new fragment
                   ((and
                     ;; fragment we were on
                     org-latex-fragment-last
@@ -625,45 +629,45 @@ before packages are loaded."
                     ;; property which is less likely to change for the comparison.
                     (not (= begin
                             org-latex-fragment-last)))
-                  ;; go back to last one and put image back
-                  (save-excursion
-                    (goto-char org-latex-fragment-last)
-                    (when (my/org-in-latex-fragment-p) (org-latex-preview))
-                    ;; now remove current image
-                    (goto-char begin)
-                    (let ((ov (my/org-latex-fragment--get-current-latex-fragment)))
-                      (when ov
-                        (delete-overlay ov)))
-                    ;; and save new fragment
-                    (setq org-latex-fragment-last begin)))
+                   ;; go back to last one and put image back
+                   (save-excursion
+                     (goto-char org-latex-fragment-last)
+                     (when (my/org-in-latex-fragment-p) (org-latex-preview))
+                     ;; now remove current image
+                     (goto-char begin)
+                     (let ((ov (my/org-latex-fragment--get-current-latex-fragment)))
+                       (when ov
+                         (delete-overlay ov)))
+                     ;; and save new fragment
+                     (setq org-latex-fragment-last begin)))
                   ;; were on a fragment and now are not on a fragment
                   ((and
                     ;; not on a fragment now
                     (not begin)
                     ;; but we were on one
                     org-latex-fragment-last)
-                  ;; put image back on
-                  (save-excursion
-                    (goto-char org-latex-fragment-last)
-                    (when (my/org-in-latex-fragment-p)(org-latex-preview)))
-                  ;; unset last fragment
-                  (setq org-latex-fragment-last nil))
+                   ;; put image back on
+                   (save-excursion
+                     (goto-char org-latex-fragment-last)
+                     (when (my/org-in-latex-fragment-p)(org-latex-preview)))
+                   ;; unset last fragment
+                   (setq org-latex-fragment-last nil))
                   ;; were not on a fragment, and now are
                   ((and
                     ;; we were not one one
                     (not org-latex-fragment-last)
                     ;; but now we are
                     begin)
-                  (save-excursion
-                    (goto-char begin)
-                    ;; remove image
-                    (let ((ov (my/org-latex-fragment--get-current-latex-fragment)))
-                      (when ov
-                        (delete-overlay ov)))
-                    (setq org-latex-fragment-last begin)))
+                   (save-excursion
+                     (goto-char begin)
+                     ;; remove image
+                     (let ((ov (my/org-latex-fragment--get-current-latex-fragment)))
+                       (when ov
+                         (delete-overlay ov)))
+                     (setq org-latex-fragment-last begin)))
                   ;; else not on a fragment
                   ((not begin)
-                  (setq org-latex-fragment-last nil)))))
+                   (setq org-latex-fragment-last nil)))))
         (error nil)))
 
     (add-hook 'post-command-hook 'org-latex-fragment-toggle-auto)
