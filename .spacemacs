@@ -694,7 +694,8 @@ before packages are loaded."
     (setq org-download-heading-lvl 0)
     (setq-default org-download-image-dir ".\\images\\")
     ;; not the escaped " so that the space in the process name works
-    (setq org-download-screenshot-method "\"c:/Program Files/ImageMagick-7.1.0-Q16-HDRI/convert.exe\" clipboard: %s")
+    ;; (setq org-download-screenshot-method "\"c:/Program Files/ImageMagick-7.1.0-Q16-HDRI/convert.exe\" clipboard: %s")
+    (setq org-download-screenshot-method "C:/msys64/mingw64/bin/convert.exe clipboard: %s")
 
     (spacemacs/set-leader-keys (kbd "miDi") 'org-download-clipboard)
 
