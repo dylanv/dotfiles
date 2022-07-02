@@ -674,6 +674,19 @@ before packages are loaded."
     (setq org-latex-fragment-toggle-helper (byte-compile 'org-latex-fragment-toggle-helper))
     (setq org-latex-fragment-toggle-auto (byte-compile 'org-latex-fragment-toggle-auto))
 
+    ;; OS specific setup
+    (cond ((memq window-system '(mac ns))
+        (setq org-directory "~/Dropbox/Notes")
+        ;; brew install pngpaste
+        (setq org-download-screenshot-method "pngpaste %s"))
+      ((eq system-type 'windows-nt)
+        (setq org-directory "d:/Dropbox/Notes")
+        (setq org-download-screenshot-method "C:/msys64/mingw64/bin/convert.exe clipboard: %s")
+        ;; msys install imagemagick diffutils
+        ;; not the escaped " so that the space in the process name works
+        ;; (setq org-download-screenshot-method "\"c:/Program Files/ImageMagick-7.1.0-Q16-HDRI/convert.exe\" clipboard: %s")
+    ))
+
     ;; todo states
     ;; https://practical.li/spacemacs/org-mode/todo-states.html
     (setq org-todo-keywords '((sequence "TODO" "DOING" "BLOCKED" "|" "DONE" "CANCELLED")))
