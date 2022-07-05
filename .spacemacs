@@ -711,12 +711,14 @@ before packages are loaded."
 
     (spacemacs/set-leader-keys (kbd "miDi") 'org-download-clipboard)
 
+    ;; https://orgmode.org/manual/Template-elements.html#Template-elements
+    ;; https://orgmode.org/manual/Template-expansion.html
     (require 'org-reverse-datetree)
     (setq org-capture-templates
           '(("l" "Log" entry
              (file+function "log.org" org-reverse-datetree-goto-date-in-file)
              "* TODO %^{Description} %^g"
-             :jump-to-captured t)
+             :jump-to-captured t :immediate-finish)
             ("b" "Bookmark" entry
              (file+function "notes.org" (lambda () (org-reverse-datetree-goto-date-in-file
                                                     nil :olp '("Bookmarks"))))
