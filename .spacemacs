@@ -580,6 +580,8 @@ before packages are loaded."
     (setq org-startup-with-latex-preview t)
     ;; Show italic/bold without the characters around
     (setq org-hide-emphasis-markers t)
+    ;; Hide the * symbols before headings
+    (setq org-hide-leading-stars t)
     ;; Make latex figures larger
     (setq org-modules '(org-latex))
     (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.7))
@@ -716,8 +718,6 @@ before packages are loaded."
     ;; This seems to prevent the issue
     ;; (custom-set-faces '(default ((t (:background nil)))))
     (require 'org-reverse-datetree)
-    (setq org-directory "d:/Dropbox/Notes")
-
     (setq org-capture-templates
           '(("l" "Log" entry
              (file+function "log.org" org-reverse-datetree-goto-date-in-file)
@@ -746,14 +746,33 @@ before packages are loaded."
     (evil-define-key 'visual evil-surround-mode-map "s" 'evil-substitute)
     (evil-define-key 'visual evil-surround-mode-map "S" 'evil-surround-region))
 
-  ;; Spellcheck
-  (setq ispell-program-name "C:/msys64/mingw64/bin/hunspell.exe")
-  (setenv "LANG" "en_GB")
-  (with-eval-after-load "ispell"
-    (setq ispell-really-hunspell t)
-    (setq ispell-local-dictionary "en_GB"))
-
+  (cond ((memq window-system '(mac ns))
+    ;; Spellcheck we only need to do this on windows
+    (setq ispell-program-name "C:/msys64/mingw64/bin/hunspell.exe")
+    (setenv "LANG" "en_GB")
+    (with-eval-after-load "ispell"
+      (setq ispell-really-hunspell t)
+      (setq ispell-local-dictionary "en_GB"))))
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+(defun dotspacemacs/emacs-custom-settings ()
+  "Emacs custom settings.
+This is an auto-generated function, do not modify its content directly, use
+Emacs customize menu instead.
+This function is called at the very end of Spacemacs initialization."
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(tern yasnippet-snippets ws-butler writeroom-mode winum which-key web-beautify volatile-highlights vim-powerline vim-empty-lines-mode uuidgen use-package undo-tree treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toc-org symon symbol-overlay string-inflection string-edit spacemacs-whitespace-cleanup spacemacs-purpose-popwin spaceline-all-the-icons space-doc smeargle restart-emacs rainbow-delimiters quickrun prettier-js popwin pcre2el password-generator paradox overseer orgit-forge org-superstar org-rich-yank org-reverse-datetree org-projectile org-present org-pomodoro org-mime org-download org-contrib org-cliplink open-junk-file npm-mode nodejs-repl nameless multi-line monokai-theme macrostep lsp-julia lorem-ipsum livid-mode link-hint julia-repl json-reformat json-navigator json-mode js2-refactor js-doc inspector info+ indent-guide hybrid-mode hungry-delete htmlize holy-mode hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-ls-git helm-git-grep helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitignore-templates git-timemachine git-modes git-messenger git-link git-gutter-fringe fuzzy font-lock+ flyspell-correct-helm flycheck-pos-tip flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-tex evil-terminal-cursor-changer evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-evilified-state evil-escape evil-ediff evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu emr elisp-slime-nav elisp-def editorconfig dumb-jump drag-stuff dotenv-mode dired-quick-sort diminish devdocs define-word company-reftex company-math company-auctex column-enforce-mode clean-aindent-mode centered-cursor-mode browse-at-remote auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile anki-editor aggressive-indent ace-link ace-jump-helm-line ac-ispell)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(highlight-parentheses-highlight ((nil (:weight ultra-bold))) t))
+)
