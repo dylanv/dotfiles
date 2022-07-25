@@ -685,12 +685,9 @@ before packages are loaded."
       ((eq system-type 'windows-nt)
         (setq org-directory "d:/Dropbox/Notes")
         (setq org-download-screenshot-method "C:/msys64/mingw64/bin/convert.exe clipboard: %s")
-        ;; msys install imagemagick diffutils
-        ;; not the escaped " so that the space in the process name works
-        ;; (setq org-download-screenshot-method "\"c:/Program Files/ImageMagick-7.1.0-Q16-HDRI/convert.exe\" clipboard: %s")
     ))
 
-    ;; ORG-TODO
+    ;; ORG-do
     ;; todo states
     ;; https://practical.li/spacemacs/org-mode/todo-states.html
     (setq org-todo-keywords '((sequence "TODO" "DOING" "BLOCKED" "|" "DONE" "CANCELLED")))
@@ -728,10 +725,10 @@ before packages are loaded."
              :empty-lines 0)
             ))
 
-    (defun org-refile-to-log-today (arg)
-      (interactive "P")
-      (org-reverse-datetree-refile-to-file (concat org-directory "/log.org") (current-time)))
-    (spacemacs/set-leader-keys (kbd "mlr") 'org-refile-to-log-today)
+    ;; (defun org-refile-to-log-today (arg)
+    ;;   (interactive "P")
+    ;;   (org-reverse-datetree-refile-to-file (concat org-directory "/log.org") (current-time)))
+    ;; (spacemacs/set-leader-keys (kbd "mlr") 'org-refile-to-log-today)
 
   )
   ;; -------
@@ -750,13 +747,13 @@ before packages are loaded."
     (evil-define-key 'visual evil-surround-mode-map "s" 'evil-substitute)
     (evil-define-key 'visual evil-surround-mode-map "S" 'evil-surround-region))
 
-  (with-eval-after-load "ispell"
-    (if (eq system-type 'windows-nt)
+  (if (eq system-type 'windows-nt)
+    (with-eval-after-load "ispell"
       ;; Spellcheck we only need to do this on windows
       (setq ispell-program-name "C:/msys64/mingw64/bin/hunspell.exe")
       (setenv "LANG" "en_GB")
-        (setq ispell-really-hunspell t)
-        (setq ispell-local-dictionary "en_GB")))
+      (setq ispell-really-hunspell t)
+      (setq ispell-local-dictionary "en_GB")))
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
