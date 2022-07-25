@@ -568,6 +568,7 @@ before packages are loaded."
   ;; ORG-MODE
   ;; --------
   (with-eval-after-load 'org
+    ;; AESTHETICS
     ;; Nice pretty indents
     (setq org-startup-indented t)
     ;; Start up collapsed
@@ -689,6 +690,7 @@ before packages are loaded."
         ;; (setq org-download-screenshot-method "\"c:/Program Files/ImageMagick-7.1.0-Q16-HDRI/convert.exe\" clipboard: %s")
     ))
 
+    ;; ORG-TODO
     ;; todo states
     ;; https://practical.li/spacemacs/org-mode/todo-states.html
     (setq org-todo-keywords '((sequence "TODO" "DOING" "BLOCKED" "|" "DONE" "CANCELLED")))
@@ -708,9 +710,9 @@ before packages are loaded."
     (require 'org-download)
     (setq org-download-heading-lvl 0)
     (setq-default org-download-image-dir ".\\images\\")
-
     (spacemacs/set-leader-keys (kbd "miDi") 'org-download-clipboard)
 
+    ;; ORG-CAPTURE
     ;; https://orgmode.org/manual/Template-elements.html#Template-elements
     ;; https://orgmode.org/manual/Template-expansion.html
     (require 'org-reverse-datetree)
@@ -725,7 +727,13 @@ before packages are loaded."
              "* %^{Description} %^g\n%(org-cliplink-capture)"
              :empty-lines 0)
             ))
-    )
+
+    (defun org-refile-to-log-today (arg)
+      (interactive "P")
+      (org-reverse-datetree-refile-to-file (concat org-directory "/log.org") (current-time)))
+    (spacemacs/set-leader-keys (kbd "mlr") 'org-refile-to-log-today)
+
+  )
   ;; -------
 
   ;; ANKI-EDITOR
@@ -742,13 +750,13 @@ before packages are loaded."
     (evil-define-key 'visual evil-surround-mode-map "s" 'evil-substitute)
     (evil-define-key 'visual evil-surround-mode-map "S" 'evil-surround-region))
 
-  (cond (system-type 'windows-nt)
-    ;; Spellcheck we only need to do this on windows
-    (setq ispell-program-name "C:/msys64/mingw64/bin/hunspell.exe")
-    (setenv "LANG" "en_GB")
-    (with-eval-after-load "ispell"
-      (setq ispell-really-hunspell t)
-      (setq ispell-local-dictionary "en_GB")))
+  (with-eval-after-load "ispell"
+    (if (eq system-type 'windows-nt)
+      ;; Spellcheck we only need to do this on windows
+      (setq ispell-program-name "C:/msys64/mingw64/bin/hunspell.exe")
+      (setenv "LANG" "en_GB")
+        (setq ispell-really-hunspell t)
+        (setq ispell-local-dictionary "en_GB")))
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
