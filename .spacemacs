@@ -47,7 +47,12 @@ This function should only modify configuration layer settings."
      ;; lsp
      ;; markdown
      multiple-cursors
-     org
+     (org
+      :pre-init
+      (package-initialize)
+      :variables
+      org-adapt-indentation nil
+	    org-want-todo-bindings t)
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
