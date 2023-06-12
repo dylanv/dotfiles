@@ -688,14 +688,15 @@ before packages are loaded."
     (setq org-latex-fragment-toggle-auto (byte-compile 'org-latex-fragment-toggle-auto))
 
     ;; OS specific setup
-    (cond ((memq window-system '(mac ns))
-        (setq org-directory "~/Dropbox/Notes")
-        ;; brew install pngpaste
-        (setq org-download-screenshot-method "pngpaste %s"))
-      ((eq system-type 'windows-nt)
-        (setq org-directory "d:/Dropbox/Notes")
-        (setq org-download-screenshot-method "C:/msys64/mingw64/bin/convert.exe clipboard: %s")
-    ))
+    ;; (cond ((memq window-system '(mac ns))
+    ;;     (setq org-directory "~/Dropbox/Notes")
+    ;;     ;; brew install pngpaste
+    ;;     (setq org-download-screenshot-method "pngpaste %s"))
+    ;;   ((eq system-type 'windows-nt)
+    ;;     (setq org-directory "d:/Dropbox/Notes")
+    ;;     (setq org-download-screenshot-method "C:/msys64/mingw64/bin/convert.exe clipboard: %s")
+    ;; ))
+    (setq org-directory "~/Dropbox/Notes")
 
     ;; ORG-do
     ;; todo states
