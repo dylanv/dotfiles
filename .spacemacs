@@ -570,6 +570,11 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+
+  ;; Get rid of annoying gap under the window with certain window managers
+  (setq frame-resize-pixelwise t)
+
+
   ;; ORG-MODE
   ;; --------
   (with-eval-after-load 'org
