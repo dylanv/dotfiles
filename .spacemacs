@@ -740,15 +740,14 @@ before packages are loaded."
     ;;   (org-reverse-datetree-refile-to-file (concat org-directory "/log.org") (current-time)))
     ;; (spacemacs/set-leader-keys (kbd "mlr") 'org-refile-to-log-today)
 
+    ;; ANKI-EDITOR
+    ;; Key-bindings for https://github.com/louietan/anki-editor
+    (require 'anki-editor)
+    (spacemacs/set-leader-keys (kbd "mmi") 'anki-editor-insert-note)
+    (spacemacs/set-leader-keys (kbd "mmc") 'anki-editor-cloze-region)
+    (spacemacs/set-leader-keys (kbd "mmp") 'anki-editor-push-notes)
   )
   ;; -------
-
-  ;; ANKI-EDITOR
-  ;; Key-bindings for https://github.com/louietan/anki-editor
-  (require 'anki-editor)
-  (spacemacs/set-leader-keys (kbd "mmi") 'anki-editor-insert-note)
-  (spacemacs/set-leader-keys (kbd "mmc") 'anki-editor-cloze-region)
-  (spacemacs/set-leader-keys (kbd "mmp") 'anki-editor-push-notes)
 
   ;; VIM SURROUND
   (require 'evil-surround)
