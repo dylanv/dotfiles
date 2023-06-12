@@ -731,7 +731,7 @@ before packages are loaded."
             ("b" "Bookmark" entry
              (file+function "notes.org" (lambda () (org-reverse-datetree-goto-date-in-file
                                                     nil :olp '("Bookmarks"))))
-             "* %^{Description} %^g\n%(org-cliplink-capture)"
+             "* %^{Description}\n%(org-cliplink-capture)"
              :empty-lines 0)
             ))
 
