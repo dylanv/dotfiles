@@ -27,12 +27,12 @@ This function should only modify configuration layer settings."
    dotspacemacs-ask-for-lazy-installation t
 
    ;; List of additional paths where to look for configuration layers.
-   ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
+   ;; Paths must have a trailing slash (i.e. "~/.mycontribs/")
    dotspacemacs-configuration-layer-path '()
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(javascript
+   '(
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
@@ -43,7 +43,6 @@ This function should only modify configuration layer settings."
      emacs-lisp
      git
      helm
-     latex
      ;; lsp
      ;; markdown
      multiple-cursors
@@ -51,15 +50,18 @@ This function should only modify configuration layer settings."
       :pre-init
       (package-initialize)
       :variables
-      org-adapt-indentation nil
-	    org-want-todo-bindings t)
+       org-want-todo-bindings t
+       org-enable-sticky-header t
+       org-enable-modern-support t
+       org-enable-appear-support t)
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
-     julia
-     (spell-checking :variables spell-checking-enable-auto-dictionary nil)
+     spell-checking
      syntax-checking
-     version-control
+     (version-control :variables
+                      version-control-diff-side 'left)
+     ;; https://develop.spacemacs.org/layers/+tools/xclipboard/README.html
      xclipboard
      treemacs)
 
@@ -368,12 +370,12 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
-   ;; (default nil) (Emacs 24.4+ only)
+   ;; (default t) (Emacs 24.4+ only)
    dotspacemacs-maximized-at-startup nil
 
    ;; If non-nil the frame is undecorated when Emacs starts up. Combine this
-   ;; variable with `dotspacemacs-maximized-at-startup' in OSX to obtain
-   ;; borderless fullscreen. (default nil)
+   ;; variable with `dotspacemacs-maximized-at-startup' to obtain fullscreen
+   ;; without external boxes. Also disables the internal border. (default nil)
    dotspacemacs-undecorated-at-startup nil
 
    ;; A value from the range (0..100), in increasing opacity, which describes
@@ -385,6 +387,11 @@ It should only modify the values of Spacemacs settings."
    ;; the transparency level of a frame when it's inactive or deselected.
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
    dotspacemacs-inactive-transparency 90
+
+   ;; A value from the range (0..100), in increasing opacity, which describes the
+   ;; transparency level of a frame background when it's active or selected. Transparency
+   ;; can be toggled through `toggle-background-transparency'. (default 90)
+   dotspacemacs-background-transparency 90
 
    ;; If non-nil show the titles of transient states. (default t)
    dotspacemacs-show-transient-state-title t
@@ -495,7 +502,9 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil - same as frame-title-format)
    dotspacemacs-icon-title-format nil
 
-   ;; Show trailing whitespace (default t)
+   ;; Color highlight trailing whitespace in all prog-mode and text-mode derived
+   ;; modes such as c++-mode, python-mode, emacs-lisp, html-mode, rst-mode etc.
+   ;; (default t)
    dotspacemacs-show-trailing-whitespace t
 
    ;; Delete whitespace while saving buffer. Possible values are `all'
@@ -545,7 +554,7 @@ default it calls `spacemacs/load-spacemacs-env' which loads the environment
 variables declared in `~/.spacemacs.env' or `~/.spacemacs.d/.spacemacs.env'.
 See the header of this file for more information."
   (spacemacs/load-spacemacs-env)
-  )
+)
 
 (defun dotspacemacs/user-init ()
   "Initialization for user code:
@@ -553,7 +562,7 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-  )
+)
 
 
 (defun dotspacemacs/user-load ()
@@ -561,7 +570,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
 dump."
-  )
+)
 
 
 (defun dotspacemacs/user-config ()
@@ -571,159 +580,80 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
 
-  ;; Get rid of annoying gap under the window with certain window managers
-  (setq frame-resize-pixelwise t)
+  ;; KEYBINDINGS
+  ;; -----------
+  ;; Set it so comment has the same keybinding as pycharm
+  ;; (define-key evil-normal-state-map (kbd "C-/") #'spacemacs/comment-or-uncomment-lines)
+  ;; Normal copy and paste from clipboard (doesn't work in insert state)
+  ;; (define-key evil-normal-state-map (kbd "C-c") #'spacemacs/xclipboard-copy)
+  (define-key evil-normal-state-map (kbd "C-v") #'spacemacs/xclipboard-paste)
 
+
+  (require 'org-reverse-datetree)
+  (require 'anki-editor)
 
   ;; ORG-MODE
   ;; --------
   (with-eval-after-load 'org
+
     ;; AESTHETICS
-    ;; Nice pretty indents
-    (setq org-startup-indented t)
-    ;; Start up collapsed
-    (setq org-startup-folded t)
-    ;; When creating a new heading don't mess up the one you're currently in
-    (setq org-insert-heading-respect-content t)
-    ;; Enable automatic inline image rendering
-    (setq org-startup-with-inline-images t)
-    ;; Show equations on startup
-    (setq org-startup-with-latex-preview t)
-    ;; Show italic/bold without the characters around
-    (setq org-hide-emphasis-markers t)
-    ;; Hide the * symbols before headings
-    (setq org-hide-leading-stars t)
-    ;; Make latex figures larger
-    (setq org-modules '(org-latex))
-    (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.7))
-    ;; (plist-put org-format-latex-options :scale 1.7)
-    ;; (org :variables org-format-latex-options ' (:scale 1.7))
-    ;; Set all images to the same size
-    (setq org-image-actual-width 400)
+    ;; Get rid of annoying gap under the window with certain window managers
+    (setq frame-resize-pixelwise t)
+    ;; Make things less cramped
+    (setq-default line-spacing 2)
+    ;; Make org pretty
+    (setq org-startup-indented t
+          org-auto-align-tags t
+          org-tags-column 90
+          org-indent-indentation-per-level 3
+          org-appear-trigger 'always
+          org-startup-folded t
+          org-insert-heading-respect-content t
+          org-startup-with-inline-images t
+          org-pretty-entities t
+          org-image-actual-width 400
+          org-ellipsis "…"
+          ;; org-modules '(org-latex)
+          org-startup-with-latex-preview t
+          org-format-latex-options (plist-put org-format-latex-options :scale 1.7))
 
-    ;; Show the raw input for latex fragments under images
-    ;; https://ivanaf.com/automatic_latex_fragment_toggling_in_org-mode.html
-    ;; Had to change to use org-latex-preview because org-toggle-latex-fragment is deprecated
-    (defvar org-latex-fragment-last nil
-      "Holds last fragment/environment you were on.")
-
-    (defun my/org-latex-fragment--get-current-latex-fragment ()
-      "Return the overlay associated with the image under point."
-      (car (--select (eq (overlay-get it 'org-overlay-type) 'org-latex-overlay) (overlays-at (point)))))
-
-    (defun my/org-in-latex-fragment-p ()
-      "Return the point where the latex fragment begins, if inside
-    a latex fragment. Else return false"
-      (let* ((el (org-element-context))
-             (el-type (car el)))
-        (and (or (eq 'latex-fragment el-type) (eq 'latex-environment el-type))
-             (org-element-property :begin el))))
-
-    (defun org-latex-fragment-toggle-auto ()
-      ;; Wait for the s
-      (interactive)
-      (while-no-input
-        (run-with-idle-timer 0.05 nil 'org-latex-fragment-toggle-helper)))
-
-    (defun org-latex-fragment-toggle-helper ()
-      "Toggle a latex fragment image "
-      (condition-case nil
-          (and (eq 'org-mode major-mode)
-               (let* ((begin (my/org-in-latex-fragment-p)))
-                 (cond
-                  ;; were on a fragment and now on a new fragment
-                  ((and
-                    ;; fragment we were on
-                    org-latex-fragment-last
-                    ;; and are on a fragment now
-                    begin
-                    ;; but not on the last one this is a little tricky. as you edit the
-                    ;; fragment, it is not equal to the last one. We use the begin
-                    ;; property which is less likely to change for the comparison.
-                    (not (= begin
-                            org-latex-fragment-last)))
-                   ;; go back to last one and put image back
-                   (save-excursion
-                     (goto-char org-latex-fragment-last)
-                     (when (my/org-in-latex-fragment-p) (org-latex-preview))
-                     ;; now remove current image
-                     (goto-char begin)
-                     (let ((ov (my/org-latex-fragment--get-current-latex-fragment)))
-                       (when ov
-                         (delete-overlay ov)))
-                     ;; and save new fragment
-                     (setq org-latex-fragment-last begin)))
-                  ;; were on a fragment and now are not on a fragment
-                  ((and
-                    ;; not on a fragment now
-                    (not begin)
-                    ;; but we were on one
-                    org-latex-fragment-last)
-                   ;; put image back on
-                   (save-excursion
-                     (goto-char org-latex-fragment-last)
-                     (when (my/org-in-latex-fragment-p)(org-latex-preview)))
-                   ;; unset last fragment
-                   (setq org-latex-fragment-last nil))
-                  ;; were not on a fragment, and now are
-                  ((and
-                    ;; we were not one one
-                    (not org-latex-fragment-last)
-                    ;; but now we are
-                    begin)
-                   (save-excursion
-                     (goto-char begin)
-                     ;; remove image
-                     (let ((ov (my/org-latex-fragment--get-current-latex-fragment)))
-                       (when ov
-                         (delete-overlay ov)))
-                     (setq org-latex-fragment-last begin)))
-                  ;; else not on a fragment
-                  ((not begin)
-                   (setq org-latex-fragment-last nil)))))
-        (error nil)))
-
-    (add-hook 'post-command-hook 'org-latex-fragment-toggle-auto)
-    (setq org-latex-fragment-toggle-helper (byte-compile 'org-latex-fragment-toggle-helper))
-    (setq org-latex-fragment-toggle-auto (byte-compile 'org-latex-fragment-toggle-auto))
-
-    ;; OS specific setup
-    ;; (cond ((memq window-system '(mac ns))
-    ;;     (setq org-directory "~/Dropbox/Notes")
-    ;;     ;; brew install pngpaste
-    ;;     (setq org-download-screenshot-method "pngpaste %s"))
-    ;;   ((eq system-type 'windows-nt)
-    ;;     (setq org-directory "d:/Dropbox/Notes")
-    ;;     (setq org-download-screenshot-method "C:/msys64/mingw64/bin/convert.exe clipboard: %s")
-    ;; ))
+    ;; AGENDA
     (setq org-directory "~/Dropbox/Notes")
 
-    ;; ORG-do
+    (setq global-undo-tree-mode 1)
+
+    (setq org-log-done nil)
+
+    ;; TODO
+    ;; ----
     ;; todo states
     ;; https://practical.li/spacemacs/org-mode/todo-states.html
     (setq org-todo-keywords '((sequence "TODO" "DOING" "BLOCKED" "|" "DONE" "CANCELLED")))
+    ;; Set colours so they work with org-modern
     ;; https://en.wikipedia.org/wiki/Web_colors
-    (setq org-todo-keyword-faces
-          '(("TODO" . "DarkGray")
-            ("DOING" . "DarkOrange")
-            ("DONE" . "LimeGreen")
-            ("BLOCKED" . "DarkRed")
-            ("CANCELLED" . "DarkSlateGray")
+    (setq org-modern-todo-faces
+          '(("TODO" . (:foreground "#272822" :background "LimeGreen" :weight bold))
+            ("DOING" . (:foreground "black" :background "DeepSkyBlue" :weight bold))
+            ("DONE" . (:foreground "LimeGreen" :background "#272822" :weight bold))
+            ("BLOCKED" . (:foreground "white" :background "Firebrick" :weight bold))
+            ("CANCELLED" . (:foreground "white" :background "DarkSlateGray" :weight bold))
             ))
-    ;; Get faces working correctly
-    ;; https://www.reddit.com/r/orgmode/comments/b9qrau/customized_org_faces_being_overridden_in_buffer/
-    (add-hook 'org-mode-hook (lambda () (hl-todo-mode -1)))
 
-    ;; ORG-DOWNLOAD
-    (require 'org-download)
-    (setq org-download-heading-lvl 0)
-    (setq-default org-download-image-dir ".\\images\\")
-    (spacemacs/set-leader-keys (kbd "miDi") 'org-download-clipboard)
+    ;; Change org headline colours because theme colours are for code and notes don't need to be so intense
+    (setq org-fontify-done-headline t)
+    (custom-set-faces
+     '(org-headline-done ((((class color) (min-colors 16) (background dark)) (:foreground "DarkGray"))))
+     '(org-level-1 ((t (:inherit default :extend nil :foreground "deepskyblue"))))
+     '(org-level-2 ((t (:inherit default :extend nil :foreground "paleturquoise"))))
+     '(org-level-3 ((t (:inherit default :extend nil :foreground "Moccasin"))))
+     '(org-level-4 ((t (:inherit default :extend nil :foreground "ivory" :height 1.1)))))
 
     ;; ORG-CAPTURE
+    ;; -----------
     ;; https://orgmode.org/manual/Template-elements.html#Template-elements
     ;; https://orgmode.org/manual/Template-expansion.html
-    (require 'org-reverse-datetree)
+    ;; Mostly using org-reverse-datetree
+    ;; https://github.com/akirak/org-reverse-datetree
     (setq org-capture-templates
           '(("l" "Log" entry
              (file+function "log.org" org-reverse-datetree-goto-date-in-file)
@@ -736,19 +666,12 @@ before packages are loaded."
              :empty-lines 0)
             ))
 
-    ;; (defun org-refile-to-log-today (arg)
-    ;;   (interactive "P")
-    ;;   (org-reverse-datetree-refile-to-file (concat org-directory "/log.org") (current-time)))
-    ;; (spacemacs/set-leader-keys (kbd "mlr") 'org-refile-to-log-today)
-
     ;; ANKI-EDITOR
     ;; Key-bindings for https://github.com/louietan/anki-editor
-    (require 'anki-editor)
     (spacemacs/set-leader-keys (kbd "mmi") 'anki-editor-insert-note)
     (spacemacs/set-leader-keys (kbd "mmc") 'anki-editor-cloze-region)
     (spacemacs/set-leader-keys (kbd "mmp") 'anki-editor-push-notes)
   )
-  ;; -------
 
   ;; VIM SURROUND
   (require 'evil-surround)
@@ -757,14 +680,32 @@ before packages are loaded."
     (evil-define-key 'visual evil-surround-mode-map "s" 'evil-substitute)
     (evil-define-key 'visual evil-surround-mode-map "S" 'evil-surround-region))
 
-  (if (eq system-type 'windows-nt)
-    (with-eval-after-load "ispell"
-      ;; Spellcheck we only need to do this on windows
-      (setq ispell-program-name "C:/msys64/mingw64/bin/hunspell.exe")
-      (setenv "LANG" "en_GB")
-      (setq ispell-really-hunspell t)
-      (setq ispell-local-dictionary "en_GB")))
-  )
+  (find-file "~/Dropbox/Notes/log.org")
+)
+
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+(defun dotspacemacs/emacs-custom-settings ()
+  "Emacs custom settings.
+This is an auto-generated function, do not modify its content directly, use
+Emacs customize menu instead.
+This function is called at the very end of Spacemacs initialization."
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(ac-ispell anki-editor auto-complete auto-dictionary auto-yasnippet browse-at-remote code-review emojify deferred a evil-org flycheck-pos-tip pos-tip flyspell-correct-helm flyspell-correct fuzzy git-gutter-fringe fringe-helper git-gutter git-link git-messenger git-modes git-timemachine gitignore-templates gnuplot helm-c-yasnippet helm-company company helm-git-grep helm-ls-git helm-org-rifle htmlize org-appear org-cliplink org-contrib org-download org-mime org-modern org-pomodoro alert log4e gntp org-present org-projectile org-category-capture org-reverse-datetree org-rich-yank org-sticky-header orgit-forge orgit forge yaml markdown-mode ghub closql emacsql treepy org smeargle treemacs-magit magit magit-section git-commit with-editor transient yasnippet-snippets yasnippet ace-jump-helm-line ace-link aggressive-indent all-the-icons auto-compile auto-highlight-symbol centered-cursor-mode clean-aindent-mode column-enforce-mode define-word devdocs dired-quick-sort drag-stuff dumb-jump editorconfig elisp-def elisp-slime-nav emr clang-format list-utils eval-sexp-fu evil-anzu anzu evil-args evil-cleverparens paredit evil-collection annalist evil-easymotion evil-escape evil-exchange evil-goggles evil-iedit-state iedit evil-indent-plus evil-lion evil-lisp-state evil-matchit evil-mc evil-nerd-commenter evil-numbers evil-surround evil-textobj-line evil-tutor evil-unimpaired evil-visual-mark-mode evil-visualstar expand-region eyebrowse fancy-battery flx-ido flx flycheck-elsa flycheck-package package-lint flycheck golden-ratio google-translate helm-ag helm-descbinds helm-make helm-mode-manager helm-org helm-projectile helm-purpose helm-swoop helm-themes helm-xref helm helm-core help-fns+ hide-comnt highlight-indentation highlight-numbers parent-mode highlight-parentheses hl-todo compat hungry-delete indent-guide info+ inspector link-hint lorem-ipsum macrostep multi-line shut-up nameless open-junk-file org-superstar overseer f pkg-info epl paradox spinner password-generator popup popwin quickrun rainbow-delimiters request restart-emacs smartparens space-doc spaceline powerline spacemacs-purpose-popwin spacemacs-whitespace-cleanup string-edit-at-point string-inflection symbol-overlay symon term-cursor toc-org treemacs-evil treemacs-icons-dired treemacs-persp persp-mode treemacs-projectile treemacs projectile cfrs ht pfuture ace-window avy posframe s undo-tree queue uuidgen vi-tilde-fringe vim-powerline volatile-highlights window-purpose imenu-list winum dash writeroom-mode visual-fill-column ws-butler async bind-map diminish dotenv-mode evil-evilified-state holy-mode hybrid-mode evil goto-chg hydra lv pcre2el use-package bind-key which-key)))
+;; (custom-set-faces
+;;  ;; custom-set-faces was added by Custom.
+;;  ;; If you edit it by hand, you could mess it up, so be careful.
+;;  ;; Your init file should contain only one such instance.
+;;  ;; If there is more than one, they won't work right.
+;;  '(org-headline-done ((((class color) (min-colors 16) (background dark)) (foreground "LightSlateGray"))))
+;;  '(org-level-1 ((t (:inherit default :extend nil :foreground "deepskyblue"))))
+;;  '(org-level-2 ((t (:inherit default :extend nil :foreground "paleturquoise"))))
+;;  '(org-level-3 ((t (:inherit default :extend nil :foreground "Moccasin"))))
+;;  '(org-level-4 ((t (:inherit default :extend nil :foreground "ivory" :height 1.1)))))
+)
