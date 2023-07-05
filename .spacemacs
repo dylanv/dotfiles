@@ -664,6 +664,10 @@ before packages are loaded."
                                                     nil :olp '("Bookmarks"))))
              "* %^{Description}\n%(org-cliplink-capture)"
              :empty-lines 0)
+            ("u" "Unscheduled" entry
+             (file+olp "log.org" "Unscheduled")
+             "* TODO %^{Description} %^g"
+             :jump-to-captured t :immediate-finish t)
             ))
 
     ;; ANKI-EDITOR
@@ -686,6 +690,7 @@ before packages are loaded."
     (evil-define-key 'visual evil-surround-mode-map "s" 'evil-substitute)
     (evil-define-key 'visual evil-surround-mode-map "S" 'evil-surround-region))
 
+  ;; Open log file on startup
   (find-file (concat org-directory "log.org"))
 )
 
