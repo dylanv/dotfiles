@@ -671,6 +671,12 @@ before packages are loaded."
     (spacemacs/set-leader-keys (kbd "mmi") 'anki-editor-insert-note)
     (spacemacs/set-leader-keys (kbd "mmc") 'anki-editor-cloze-region)
     (spacemacs/set-leader-keys (kbd "mmp") 'anki-editor-push-notes)
+
+    ;; Refile TODO item to today's date with reverse datetree
+    (defun org-refile-to-today (arg)
+      (interactive "P")
+      (org-reverse-datetree-refile-to-file (concat org-directory "log.org") (current-time)))
+    (spacemacs/set-leader-keys (kbd "mst") 'org-refile-to-today)
   )
 
   ;; VIM SURROUND
