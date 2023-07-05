@@ -618,7 +618,7 @@ before packages are loaded."
           org-format-latex-options (plist-put org-format-latex-options :scale 1.7))
 
     ;; AGENDA
-    (setq org-directory "~/Dropbox/Notes")
+    (setq org-directory "~/Dropbox/Notes/")
 
     (setq global-undo-tree-mode 1)
 
@@ -680,7 +680,7 @@ before packages are loaded."
     (evil-define-key 'visual evil-surround-mode-map "s" 'evil-substitute)
     (evil-define-key 'visual evil-surround-mode-map "S" 'evil-surround-region))
 
-  (find-file "~/Dropbox/Notes/log.org")
+  (find-file (concat org-directory "log.org"))
 )
 
 
