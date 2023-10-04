@@ -588,6 +588,10 @@ before packages are loaded."
   ;; (define-key evil-normal-state-map (kbd "C-c") #'spacemacs/xclipboard-copy)
   (define-key evil-normal-state-map (kbd "C-v") #'spacemacs/xclipboard-paste)
 
+  ;; display time in powerline
+  (spaceline-define-segment datetime
+    (shell-command-to-string "echo -n $(date '+%a %d %b %I:%M%p')"))
+  (spaceline-spacemacs-theme 'datetime)
 
   (require 'org-reverse-datetree)
   (require 'anki-editor)
