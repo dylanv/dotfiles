@@ -595,6 +595,12 @@ before packages are loaded."
 
   (require 'org-reverse-datetree)
   (require 'anki-editor)
+  (defun anki-editor--anki-connect-invoke! (orig-fun &rest args)
+    (let ((request--curl-callback
+           (lambda (proc event) (request--curl-callback "localhost" proc event))))
+      (apply orig-fun args)))
+
+  (advice-add 'anki-editor--anki-connect-invoke :around #'anki-editor--anki-connect-invoke!)
 
   ;; ORG-MODE
   ;; --------
