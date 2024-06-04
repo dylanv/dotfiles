@@ -1,5 +1,7 @@
-set surround
-set multiple-cursors
 set nu
 set rnu
+set surround
 set ideajoin
+set ReplaceWithRegister
+xmap p gr
+set textobj-indent
