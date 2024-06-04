@@ -615,8 +615,9 @@ before packages are loaded."
     (setq-default line-spacing 2)
     ;; Make org pretty
     (setq org-startup-indented t
+          org-indent-mode t
           org-auto-align-tags t
-          org-tags-column 90
+          org-tags-column 95
           org-indent-indentation-per-level 3
           org-appear-trigger 'always
           org-startup-folded t
@@ -625,6 +626,7 @@ before packages are loaded."
           org-pretty-entities t
           org-image-actual-width 400
           org-ellipsis "…"
+          org-superstar-special-todo-items hide
           ;; org-modules '(org-latex)
           org-startup-with-latex-preview t
           org-format-latex-options (plist-put org-format-latex-options :scale 1.7))
