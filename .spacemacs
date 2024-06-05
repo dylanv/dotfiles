@@ -53,7 +53,9 @@ This function should only modify configuration layer settings."
        org-want-todo-bindings t
        org-enable-sticky-header t
        org-enable-modern-support t
-       org-enable-appear-support t)
+       org-enable-appear-support t
+       org-todo-dependencies-strategy 'naive-auto
+     )
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
