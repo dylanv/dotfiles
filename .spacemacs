@@ -646,25 +646,29 @@ before packages are loaded."
     ;; ----
     ;; todo states
     ;; https://practical.li/spacemacs/org-mode/todo-states.html
-    (setq org-todo-keywords '((sequence "TODO" "DOING" "BLOCKED" "|" "DONE" "CANCELLED")))
+    (setq org-todo-keywords '((sequence "TODO(t)" "PROG(p)" "WAIT(w)" "|" "DONE(d)" "FAIL(f)")))
     ;; Set colours so they work with org-modern
     ;; https://en.wikipedia.org/wiki/Web_colors
     (setq org-modern-todo-faces
-          '(("TODO" . (:foreground "#272822" :background "LimeGreen" :weight bold))
-            ("DOING" . (:foreground "black" :background "DeepSkyBlue" :weight bold))
-            ("DONE" . (:foreground "LimeGreen" :background "#272822" :weight bold))
-            ("BLOCKED" . (:foreground "white" :background "Firebrick" :weight bold))
-            ("CANCELLED" . (:foreground "white" :background "DarkSlateGray" :weight bold))
+          '(("TODO" . (:foreground "#212121" :background "LimeGreen" :weight bold))
+            ("PROG" . (:foreground "black" :background "#FF9800" :weight bold))
+            ("DONE" . (:foreground "LimeGreen" :background "#212121" :weight bold))
+            ("WAIT" . (:foreground "white" :background "Firebrick" :weight bold))
+            ("FAIL" . (:foreground "grey" :background "#212121" :weight bold))
             ))
 
     ;; Change org headline colours because theme colours are for code and notes don't need to be so intense
     (setq org-fontify-done-headline t)
     (custom-set-faces
-     '(org-headline-done ((((class color) (min-colors 16) (background dark)) (:foreground "DarkGray"))))
-     '(org-level-1 ((t (:inherit default :extend nil :foreground "deepskyblue"))))
-     '(org-level-2 ((t (:inherit default :extend nil :foreground "paleturquoise"))))
-     '(org-level-3 ((t (:inherit default :extend nil :foreground "Moccasin"))))
-     '(org-level-4 ((t (:inherit default :extend nil :foreground "ivory" :height 1.1)))))
+     '(org-headline-done ((((class color) (min-colors 16) (background dark)) (:foreground "Gray"))))
+     '(org-level-1 ((t (:inherit default :extend nil :foreground "DarkCyan"))))
+     '(org-level-2 ((t (:inherit default :extend nil :foreground "Cyan"))))
+     '(org-level-3 ((t (:inherit default :extend nil :foreground "LightCyan"))))
+     '(org-level-4 ((t (:inherit default :extend nil :foreground "Azure" :height 1.1))))
+     '(org-level-5 ((t (:inherit default :extend nil :foreground "Ivory" :height 1.0))))
+     '(org-level-6 ((t (:inherit default :extend nil :foreground "White" :height 1.0))))
+     '(org-modern-tag ((t (:inherit default :extend nil :foreground "Azure" :background "#272822" :height 0.9))))
+    )
 
     ;; ORG-CAPTURE
     ;; -----------
@@ -707,6 +711,8 @@ before packages are loaded."
     :post-config
     (evil-define-key 'visual evil-surround-mode-map "s" 'evil-substitute)
     (evil-define-key 'visual evil-surround-mode-map "S" 'evil-surround-region))
+
+  (set-background-color "#212121")
 
   ;; Open log file on startup
   (find-file (concat org-directory "log.org"))
