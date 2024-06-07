@@ -628,6 +628,7 @@ before packages are loaded."
           org-hide-emphasis-markers t
           org-image-actual-width 400
           org-ellipsis "…"
+          org-use-sub-superscripts "{}"
           ;; org-modules '(org-latex)
           org-startup-with-latex-preview t
           org-format-latex-options (plist-put org-format-latex-options :scale 1.7))
