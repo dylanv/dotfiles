@@ -707,10 +707,10 @@ before packages are loaded."
 
   ;; VIM SURROUND
   (require 'evil-surround)
-  (spacemacs|use-package-add-hook evil-surround
-    :post-config
+  (with-eval-after-load 'evil-surround
     (evil-define-key 'visual evil-surround-mode-map "s" 'evil-substitute)
-    (evil-define-key 'visual evil-surround-mode-map "S" 'evil-surround-region))
+    (evil-define-key 'visual evil-surround-mode-map "S" 'evil-surround-region)
+  )
 
   (set-background-color "#212121")
 
