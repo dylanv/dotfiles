@@ -54,15 +54,15 @@ This function should only modify configuration layer settings."
        org-enable-sticky-header t
        org-enable-modern-support t
        org-enable-appear-support t
-       org-todo-dependencies-strategy 'naive-auto
-     )
+       org-todo-dependencies-strategy 'naive-auto)
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
      spell-checking
      syntax-checking
      (version-control :variables
-                      version-control-diff-side 'left)
+                      version-control-diff-side 'left
+                      version-control-diff-tool 'diff-hl)
      ;; https://develop.spacemacs.org/layers/+tools/xclipboard/README.html
      xclipboard
      treemacs)
